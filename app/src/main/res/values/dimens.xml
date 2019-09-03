@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!-- global values -->
+    <dimen name="margin_global">24dp</dimen>
+
+    <!-- main activity -->
+    <dimen name="layout_text_input">200dp</dimen>
+    <dimen name="tv_txt_size">17sp</dimen>
+</resources>

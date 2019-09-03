@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Flighty</string>
+    
+    
+    <!-- main activity -->
+    <string name="txt_departure_code">Departure Airport</string>
+    <string name="txt_arrival_code">Arrival Airport</string>
+    <string name="txt_hint_depature_date">Depature date</string>
+    <string name="txt_hint_return_date">Return date</string>
+    <string name="txt_btn_submit">Search</string>
+    <string name="txt_info_validation">An airport code can only have alphanumberic characters.</string>
+    <string name="txt_btn_ok">OK</string>
+    <string name="txt_title_airport_validation">Airport code</string>
+</resources>

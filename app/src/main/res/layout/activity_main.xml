@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_global"
+        tools:context=".presentation.MainActivity">
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_marginTop="@dimen/margin_global"
+                  android:gravity="center_vertical"
+                  android:layout_marginBottom="@dimen/margin_global"
+                  android:orientation="horizontal"
+                  android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_departure_airport"
+                android:layout_height="wrap_content"
+                android:layout_width="@dimen/layout_text_input">
+            <EditText android:id="@+id/txt_departure_airport"
+                      tools:text="ME023"
+                      android:maxLength="10"
+                      android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz"
+                      android:hint="@string/txt_departure_code"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:inputType="textCapWords"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <ImageView android:layout_width="18dp"
+                   android:src="@drawable/info"
+                   android:id="@+id/btn_info_departure"
+                   android:layout_height="18dp"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_marginTop="@dimen/margin_global"
+                  android:gravity="center_vertical"
+                  android:layout_marginBottom="@dimen/margin_global"
+                  android:orientation="horizontal"
+                  android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_arrival_airport"
+                android:layout_height="wrap_content"
+                android:layout_width="@dimen/layout_text_input">
+            <EditText android:id="@+id/txt_arrival_airport"
+                      tools:text="ME023"
+                      android:maxLength="10"
+                      android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz"
+                      android:hint="@string/txt_arrival_code"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:inputType="textCapWords"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <ImageView android:layout_width="18dp"
+                   android:src="@drawable/info"
+                   android:id="@+id/btn_info_arrival"
+                   android:layout_height="18dp"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_marginBottom="@dimen/margin_global"
+                  android:orientation="vertical"
+                  android:layout_height="wrap_content">
+        <TextView android:layout_width="match_parent"
+                  android:layout_marginBottom="4dp"
+                  android:text="@string/txt_hint_depature_date"
+                  android:layout_height="wrap_content"/>
+        <TextView android:layout_width="match_parent"
+                  android:textSize="@dimen/tv_txt_size"
+                  android:id="@+id/txt_departure_date"
+                  android:drawableEnd="@drawable/ic_chevron"
+                  tools:text="23 March 2019"
+                  android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_marginBottom="@dimen/margin_global"
+                  android:orientation="vertical"
+                  android:layout_height="wrap_content">
+        <TextView android:layout_width="match_parent"
+                  android:layout_marginBottom="4dp"
+                  android:text="@string/txt_hint_return_date"
+                  android:layout_height="wrap_content"/>
+        <TextView android:layout_width="match_parent"
+                  android:id="@+id/txt_return_date"
+                  android:textSize="@dimen/tv_txt_size"
+                  tools:text="23 March 2019"
+                  android:drawableEnd="@drawable/ic_chevron"
+                  android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <Button android:layout_width="match_parent"
+            android:id="@+id/btn_submit"
+            android:text="@string/txt_btn_submit"
+            android:layout_height="wrap_content"/>
+</LinearLayout>
