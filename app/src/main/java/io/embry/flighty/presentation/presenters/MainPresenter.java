@@ -12,15 +12,54 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MainPresenter implements BasePresenter {
+public class MainPresenter extends BasePresenter<MainPresenter.ViewSurface> {
 
     private FlightService service;
+    private ViewSurface viewSurface;
 
     @Inject
     public MainPresenter(FlightService service) {
         this.service = service;
     }
 
+    //region base presenter
+    @Override
+    public void onStart(ViewSurface viewSurface) {
+        this.viewSurface = viewSurface;
+        //setDepartureDate();
+        //setReturnDate();
+        service.retrieveFlightData(new AsyncResultCallback<List<FlightData>>() {
+            @Override
+            public void onSuccess(List<FlightData> flightData) {
+                if (flightData != null && !flightData.isEmpty()) {
+                    for (FlightData data : flightData) {
+                        Log.v("TAG", data.getAirlineLogoAddress());
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+
+    }
+
+    @Override
+    protected void onStop(ViewSurface viewSurface) {
+
+    }
+
+    @Override
+    protected void onResume() {
+    }
+    //endregion
+
+    //region private
     private void setDepartureDate() {
         DateFormat format = DateFormat.getDateInstance(DateFormat.MEDIUM);
         //departureDate.setText(format.format(getToday()));
@@ -41,34 +80,8 @@ public class MainPresenter implements BasePresenter {
         calendar.add(Calendar.HOUR_OF_DAY, 24);
         return calendar.getTime();
     }
+    //endregion
 
-    @Override
-    public void onStart() {
-        service.retrieveFlightData(new AsyncResultCallback<List<FlightData>>() {
-            @Override
-            public void onSuccess(List<FlightData> flightData) {
-                Log.v("TAG", "success");
-            }
-
-            @Override
-            public void onError(Throwable t) {
-
-            }
-        });
-    }
-
-    @Override
-    public void onPause() {
-        service = null;
-    }
-
-    @Override
-    public void onStop() {
-        service = null;
-    }
-
-    @Override
-    public void onResume() {
-
+    public interface ViewSurface {
     }
 }

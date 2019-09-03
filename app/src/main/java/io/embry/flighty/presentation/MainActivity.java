@@ -18,7 +18,7 @@ import io.embry.flighty.presentation.presenters.MainPresenter;
 
 import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainPresenter.ViewSurface {
 
     @BindView(R.id.txt_arrival_airport)
     EditText arrivalAirport;
@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         inject();
         ButterKnife.bind(this);
-        //setDepartureDate();
-        //setReturnDate();
 
         departureDate.setOnClickListener(view -> {
             //onClick
@@ -65,8 +63,7 @@ public class MainActivity extends AppCompatActivity {
         btnInfoDeparture.setOnClickListener(view -> {
             getInfoDialog().show();
         });
-
-        presenter.onStart();
+        presenter.onStart(this);
     }
 
 
