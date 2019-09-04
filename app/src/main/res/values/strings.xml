@@ -17,9 +17,9 @@
     <string name="txt_departure_airport_error">Sorry, please set a departure airport code</string>
     <string name="title_activity_flight_list">FlightListActivity</string>
     <string name="txt_query_flights">Query Flight data</string>
-    <string name="txt_stops">Stops %1d</string>
-    <string name="txt_inbound_duration">Inbound Duration: %1s</string>
-    <string name="txt_outbound_duration">Outbound Duration: %1s</string>
-    <string name="txt_cost">Cost: %1s</string>
+    <string name="txt_stops">Stops: %1d</string>
+    <string name="txt_inbound_duration">Inbound Duration: %1s hours</string>
+    <string name="txt_outbound_duration">Outbound Duration: %1s hours</string>
+    <string name="txt_cost">Cost: $%1s</string>
     <string name="unknown">Unknown</string>
 </resources>

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.ButterKnife;
+import com.squareup.picasso.Picasso;
 import io.embry.flighty.R;
 import io.embry.flighty.data.FlightData;
 
@@ -36,6 +37,9 @@ public class FlightDataAdapter extends RecyclerView.Adapter<FlightDataAdapter.Fl
         FlightData data = flightData.get(position);
         if (data == null) {
             return;
+        }
+        if (data.getAirlineLogoAddress() != null) {
+            Picasso.get().load(data.getAirlineLogoAddress()).into(holder.logo);
         }
         if (data.getAirlineName() != null) {
             holder.title.setText(data.getAirlineName());
