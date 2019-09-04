@@ -2,7 +2,7 @@ package io.embry.flighty.injection;
 
 
 import dagger.Component;
-import io.embry.flighty.presentation.MainActivity;
+import io.embry.flighty.presentation.view.MainActivity;
 
 @ActivityScope
 @Component(dependencies = AppComponent.class, modules = {ActivityModule.class})

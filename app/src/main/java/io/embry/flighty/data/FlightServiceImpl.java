@@ -1,7 +1,7 @@
 package io.embry.flighty.data;
 
 import androidx.annotation.Nullable;
-import io.embry.flighty.presentation.AsyncResultCallback;
+import io.embry.flighty.util.AsyncResultCallback;
 import io.embry.flighty.repository.FlightService;
 import retrofit2.Call;
 import retrofit2.Callback;

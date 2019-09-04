@@ -8,4 +8,8 @@
     <!-- main activity -->
     <dimen name="layout_text_input">200dp</dimen>
     <dimen name="tv_txt_size">17sp</dimen>
+
+    <!-- custom date picker dialog -->
+    <dimen name="layout_width_datepicker">240dp</dimen>
+    <dimen name="layout_height_datepicker">180dp</dimen>
 </resources>

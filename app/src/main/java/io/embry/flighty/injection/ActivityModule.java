@@ -7,6 +7,7 @@ import dagger.Provides;
 import io.embry.flighty.app.FlightyApp;
 import io.embry.flighty.data.FlightServiceImpl;
 import io.embry.flighty.presentation.presenters.MainPresenter;
+import io.embry.flighty.presentation.presenters.MainPresenterContract;
 import io.embry.flighty.repository.FlightService;
 import retrofit2.Retrofit;
 
@@ -21,7 +22,7 @@ public class ActivityModule {
     }
 
     @Provides
-    MainPresenter provideMainPresenter(FlightService service) {
+    MainPresenterContract provideMainPresenter(FlightService service) {
         return new MainPresenter(service);
     }
 

@@ -1,4 +1,4 @@
-package io.embry.flighty.presentation;
+package io.embry.flighty.presentation.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.embry.flighty.R;
+import io.embry.flighty.util.AnimationUtil;
 
 public class LauncherActivity extends AppCompatActivity {
 

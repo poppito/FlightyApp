@@ -1,4 +1,4 @@
-package io.embry.flighty.presentation;
+package io.embry.flighty.util;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;

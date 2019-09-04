@@ -1,7 +1,7 @@
 package io.embry.flighty.repository;
 
 import io.embry.flighty.data.FlightData;
-import io.embry.flighty.presentation.AsyncResultCallback;
+import io.embry.flighty.util.AsyncResultCallback;
 
 import java.util.List;
 

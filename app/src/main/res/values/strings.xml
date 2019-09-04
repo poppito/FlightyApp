@@ -11,4 +11,8 @@
     <string name="txt_info_validation">An airport code can only have alphanumberic characters.</string>
     <string name="txt_btn_ok">OK</string>
     <string name="txt_title_airport_validation">Airport code</string>
+    <string name="txt_date_error">Sorry, return date should be later than departure date.</string>
+    <string name="txt_title_error">Oops</string>
+    <string name="txt_arrival_airport_error">Sorry, please set an arrival airport code</string>
+    <string name="txt_departure_airport_error">Sorry, please set a departure airport code</string>
 </resources>

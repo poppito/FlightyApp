@@ -1,4 +1,4 @@
-package io.embry.flighty.presentation;
+package io.embry.flighty.util;
 
 public interface AsyncResultCallback<T> {
     void onSuccess(T t);
