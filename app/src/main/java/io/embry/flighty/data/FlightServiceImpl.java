@@ -24,7 +24,7 @@ public class FlightServiceImpl implements FlightService {
         service.getFlightData(departureAirportCode, arrivalAirportCode, departureDate, arrivalDate).enqueue(new Callback<List<FlightData>>() {
             @Override
             public void onResponse(@Nullable Call<List<FlightData>> call, @Nullable Response<List<FlightData>> response) {
-                if (response != null && response.body() != null) {
+                if (response != null && response.code() == 200 && response.body() != null) {
                     callback.onSuccess(response.body());
                 } else {
                     callback.onError(new Throwable());

@@ -1,16 +1,13 @@
 package io.embry.flighty.presentation.presenters;
 
-import android.util.Log;
 import io.embry.flighty.data.FlightData;
 import io.embry.flighty.repository.FlightService;
 import io.embry.flighty.util.AsyncResultCallback;
 
 import javax.inject.Inject;
 import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class MainPresenter implements MainPresenterContract<MainPresenter.ViewSurface> {
 
@@ -92,22 +89,25 @@ public class MainPresenter implements MainPresenterContract<MainPresenter.ViewSu
     //region private
     public void retrieveFlightData() {
         viewSurface.showLoader();
-        service.retrieveFlightData(new AsyncResultCallback<List<FlightData>>() {
-            @Override
-            public void onSuccess(List<FlightData> flightData) {
-                viewSurface.hideLoader();
-                if (flightData != null && !flightData.isEmpty()) {
-                    for (FlightData data : flightData) {
-                        Log.v("TAG", data.getAirlineLogoAddress());
+        service.retrieveFlightData(departureAirportCode,
+                arrivalAirportCode,
+                getFormattedDate(departureDate),
+                getFormattedDate(returnDate),
+                new AsyncResultCallback<List<FlightData>>() {
+                    @Override
+                    public void onSuccess(List<FlightData> flightData) {
+                        viewSurface.hideLoader();
+                        if (flightData != null) {
+                            viewSurface.showFlightData(flightData);
+                        }
                     }
-                }
-            }
 
-            @Override
-            public void onError(Throwable t) {
-                viewSurface.hideLoader();
-            }
-        });
+                    @Override
+                    public void onError(Throwable t) {
+                        viewSurface.hideLoader();
+                        viewSurface.showErrorResponse(t.getMessage());
+                    }
+                });
     }
 
     private void renderInitialDateValues() {
@@ -149,6 +149,11 @@ public class MainPresenter implements MainPresenterContract<MainPresenter.ViewSu
     private boolean validateReturnDate() {
         return departureDate.before(returnDate);
     }
+
+    private String getFormattedDate(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault());
+        return format.format(date);
+    }
     //endregion
 
     public interface ViewSurface {
@@ -169,5 +174,9 @@ public class MainPresenter implements MainPresenterContract<MainPresenter.ViewSu
         void showDepartureAirportError();
 
         void showArrivalAirportError();
+
+        void showErrorResponse(String error);
+
+        void showFlightData(List<FlightData> flightDataList);
     }
 }

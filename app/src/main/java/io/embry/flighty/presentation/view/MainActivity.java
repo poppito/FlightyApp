@@ -4,18 +4,17 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.embry.flighty.R;
 import io.embry.flighty.app.FlightyApp;
+import io.embry.flighty.data.FlightData;
 import io.embry.flighty.injection.ActivityComponent;
 import io.embry.flighty.injection.ActivityModule;
 import io.embry.flighty.injection.DaggerActivityComponent;
@@ -23,6 +22,7 @@ import io.embry.flighty.presentation.presenters.MainPresenter;
 import io.embry.flighty.presentation.presenters.MainPresenterContract;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         MainPresenter.ViewSurface,
@@ -52,6 +52,12 @@ public class MainActivity extends AppCompatActivity implements
 
     @BindView(R.id.btn_submit)
     Button btnSubmit;
+
+    @BindView(R.id.recycler_flight_list)
+    RecyclerView flightList;
+
+    @BindView(R.id.layout_query_container)
+    LinearLayout queryContainer;
 
     private AlertDialog cachedInformationDialog;
 
@@ -178,12 +184,26 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void showDepartureAirportError() {
-        showError(R.string.txt_departure_airport_error);
+        showError(getString(R.string.txt_departure_airport_error));
     }
 
     @Override
     public void showArrivalAirportError() {
-        showError(R.string.txt_arrival_airport_error);
+        showError(getString(R.string.txt_arrival_airport_error));
+    }
+
+    @Override
+    public void showErrorResponse(String error) {
+        showError(error);
+    }
+
+    @Override
+    public void showFlightData(List<FlightData> flightDataList) {
+        queryContainer.setVisibility(View.GONE);
+        FlightDataAdapter dataAdapter = new FlightDataAdapter(flightDataList, this);
+        flightList.setVisibility(View.VISIBLE);
+        flightList.setAdapter(dataAdapter);
+        flightList.setLayoutManager(new LinearLayoutManager(this));
     }
 
     //endregion
@@ -202,10 +222,10 @@ public class MainActivity extends AppCompatActivity implements
         cachedInformationDialog.show();
     }
 
-    private void showError(@StringRes int message) {
+    private void showError(String error) {
         new AlertDialog.Builder(this)
                 .setIcon(getDrawable(R.mipmap.ic_launcher))
-                .setMessage(getString(message))
+                .setMessage(error)
                 .setTitle(getString(R.string.txt_title_error))
                 .setPositiveButton(getString(R.string.txt_btn_ok), null)
                 .create()

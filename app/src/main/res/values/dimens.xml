@@ -12,4 +12,5 @@
     <!-- custom date picker dialog -->
     <dimen name="layout_width_datepicker">240dp</dimen>
     <dimen name="layout_height_datepicker">180dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>
