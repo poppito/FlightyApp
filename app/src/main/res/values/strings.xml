@@ -22,4 +22,5 @@
     <string name="txt_outbound_duration">Outbound Duration: %1s hours</string>
     <string name="txt_cost">Cost: $%1s</string>
     <string name="unknown">Unknown</string>
+    <string name="btn_search_again">Search Again</string>
 </resources>

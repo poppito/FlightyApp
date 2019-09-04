@@ -59,6 +59,12 @@ public class MainActivity extends AppCompatActivity implements
     @BindView(R.id.layout_query_container)
     LinearLayout queryContainer;
 
+    @BindView(R.id.layout_flight_list_container)
+    RelativeLayout flightContainer;
+
+    @BindView(R.id.btn_search_again)
+    Button btnSearchAgain;
+
     private AlertDialog cachedInformationDialog;
 
     private static final String TAG_RETURN_DATE = "returnDate";
@@ -97,6 +103,14 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 presenter.handleSubmitClicked();
+            }
+        });
+
+        btnSearchAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                queryContainer.setVisibility(View.VISIBLE);
+                flightContainer.setVisibility(View.GONE);
             }
         });
 
@@ -162,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements
     //endregion
 
     //region textwatcher
-
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         //do nothing
@@ -170,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        //donothing
+        //do nothing
     }
 
     @Override
@@ -201,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements
     public void showFlightData(List<FlightData> flightDataList) {
         queryContainer.setVisibility(View.GONE);
         FlightDataAdapter dataAdapter = new FlightDataAdapter(flightDataList, this);
-        flightList.setVisibility(View.VISIBLE);
+        flightContainer.setVisibility(View.VISIBLE);
         flightList.setAdapter(dataAdapter);
         flightList.setLayoutManager(new LinearLayoutManager(this));
     }
