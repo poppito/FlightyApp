@@ -87,7 +87,7 @@ public class MainPresenter implements MainPresenterContract<MainPresenter.ViewSu
     //endregion
 
     //region private
-    public void retrieveFlightData() {
+    private void retrieveFlightData() {
         viewSurface.showLoader();
         service.retrieveFlightData(departureAirportCode,
                 arrivalAirportCode,
