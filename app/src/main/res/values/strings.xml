@@ -23,4 +23,8 @@
     <string name="txt_cost">Cost: $%1s</string>
     <string name="unknown">Unknown</string>
     <string name="btn_search_again">Search Again</string>
+
+
+    <!-- Accessibility -->
+    <string name="loading">Loading</string>
 </resources>
