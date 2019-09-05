@@ -65,12 +65,13 @@ public class MainActivity extends AppCompatActivity implements
     @BindView(R.id.btn_search_again)
     Button btnSearchAgain;
 
+    @BindView(R.id.view_progressbar)
+    ProgressBar progressBar;
+
     private AlertDialog cachedInformationDialog;
 
     private static final String TAG_RETURN_DATE = "returnDate";
     private static final String TAG_DEPARTURE_DATE = "departureDate";
-
-    private Loader loader;
 
 
     //region lifecycle
@@ -78,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        loader = new Loader(this);
         inject();
         ButterKnife.bind(this);
         presenter.onStart(this);
@@ -129,12 +129,12 @@ public class MainActivity extends AppCompatActivity implements
     //region view surface
     @Override
     public void showLoader() {
-        loader.show();
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoader() {
-        loader.hide();
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

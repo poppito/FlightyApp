@@ -1,15 +1,11 @@
 package io.embry.flighty.presentation.presenters;
 
-import io.embry.flighty.data.FlightData;
 import io.embry.flighty.data.FlightServiceImpl;
 import io.embry.flighty.presentation.view.MainActivity;
 import io.embry.flighty.repository.FlightService;
-import io.embry.flighty.util.AsyncResultCallback;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import java.util.List;
 
 import static org.mockito.Mockito.verify;
 
@@ -20,14 +16,10 @@ public class MainPresenterTest {
     FlightService service;
     MainPresenterContract presenter;
 
-    AsyncResultCallback<List<FlightData>> callback;
-
-
     @Before
     public void setUp() {
         service = Mockito.mock(FlightServiceImpl.class);
         surface = Mockito.mock(MainActivity.class);
-        callback = Mockito.mock(AsyncResultCallback.class);
         presenter = new MainPresenter(service);
         presenter.onStart(surface);
     }

@@ -116,4 +116,9 @@
                 android:id='@+id/btn_search_again'
                 android:layout_height="wrap_content"/>
     </RelativeLayout>
+    <ProgressBar android:layout_width="wrap_content"
+                 android:layout_gravity="center"
+                 android:visibility="gone"
+                 android:id="@+id/view_progressbar"
+                 android:layout_height="wrap_content"/>
 </FrameLayout>
