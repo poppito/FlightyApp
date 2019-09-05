@@ -9,4 +9,5 @@ public interface MainPresenterContract<V>{
     void handleSubmitClicked();
     void handleDepartureAirportInput(String input);
     void handleArrivalAirportInput(String input);
+    void onStop();
 }

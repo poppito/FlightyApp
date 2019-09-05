@@ -84,6 +84,11 @@ public class MainPresenter implements MainPresenterContract<MainPresenter.ViewSu
         }
     }
 
+    @Override
+    public void onStop() {
+        service = null;
+    }
+
     //endregion
 
     //region private

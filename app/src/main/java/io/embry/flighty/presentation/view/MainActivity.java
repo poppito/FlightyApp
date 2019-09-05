@@ -117,6 +117,13 @@ public class MainActivity extends AppCompatActivity implements
         departureAirport.addTextChangedListener(this);
         arrivalAirport.addTextChangedListener(this);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        presenter.onStop();
+    }
+
     //endregion
 
     //region view surface
