@@ -99,19 +99,15 @@ public class MainActivity extends AppCompatActivity implements
             getInfoDialog();
         });
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnSubmit.setOnClickListener(view -> {
+
                 presenter.handleSubmitClicked();
-            }
         });
 
-        btnSearchAgain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnSearchAgain.setOnClickListener(view -> {
                 queryContainer.setVisibility(View.VISIBLE);
                 flightContainer.setVisibility(View.GONE);
-            }
+
         });
 
         departureAirport.addTextChangedListener(this);
