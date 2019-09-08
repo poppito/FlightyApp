@@ -2,9 +2,11 @@ package io.embry.flighty.app;
 
 import android.app.Application;
 import io.embry.flighty.BuildConfig;
+import io.embry.flighty.data.FlightServiceImpl;
 import io.embry.flighty.injection.AppComponent;
 import io.embry.flighty.injection.AppModule;
 import io.embry.flighty.injection.DaggerAppComponent;
+import io.embry.flighty.repository.FlightService;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -15,6 +17,7 @@ public class FlightyApp extends Application {
 
     public Retrofit retrofit;
     public AppComponent appComponent;
+    public FlightService service;
 
     @Override
     public void onCreate() {
@@ -34,6 +37,8 @@ public class FlightyApp extends Application {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();
+
+        service = new FlightServiceImpl(retrofit);
     }
 
     private void inject() {

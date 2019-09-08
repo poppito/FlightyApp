@@ -8,6 +8,7 @@ import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -18,14 +19,11 @@ import io.embry.flighty.data.FlightData;
 import io.embry.flighty.injection.ActivityComponent;
 import io.embry.flighty.injection.ActivityModule;
 import io.embry.flighty.injection.DaggerActivityComponent;
-import io.embry.flighty.presentation.presenters.MainPresenter;
-import io.embry.flighty.presentation.presenters.MainPresenterContract;
+import io.embry.flighty.presentation.viewmodels.MainViewModel;
 
-import javax.inject.Inject;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
-        MainPresenter.ViewSurface,
         TextWatcher,
         CustomDatePickerDialog.DateSetListener {
 
@@ -46,9 +44,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @BindView(R.id.btn_info_departure)
     ImageView btnInfoDeparture;
-
-    @Inject
-    MainPresenterContract presenter;
 
     @BindView(R.id.btn_submit)
     Button btnSubmit;
@@ -73,22 +68,23 @@ public class MainActivity extends AppCompatActivity implements
     private static final String TAG_RETURN_DATE = "returnDate";
     private static final String TAG_DEPARTURE_DATE = "departureDate";
 
+    private MainViewModel viewModel;
 
     //region lifecycle
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        inject();
         ButterKnife.bind(this);
-        presenter.onStart(this);
+        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        inject();
 
         departureDate.setOnClickListener(view -> {
-            presenter.handleDepartureDateClick();
+            showDepartureDateDialog();
         });
 
         returnDate.setOnClickListener(view -> {
-            presenter.handleReturnDateClick();
+            showReturnDateDialog();
         });
 
         btnInfoArrival.setOnClickListener(view -> {
@@ -100,132 +96,42 @@ public class MainActivity extends AppCompatActivity implements
         });
 
         btnSubmit.setOnClickListener(view -> {
-
-                presenter.handleSubmitClicked();
+            handleSubmitClicked();
         });
 
         btnSearchAgain.setOnClickListener(view -> {
                 queryContainer.setVisibility(View.VISIBLE);
                 flightContainer.setVisibility(View.GONE);
-
         });
 
         departureAirport.addTextChangedListener(this);
         arrivalAirport.addTextChangedListener(this);
-    }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        presenter.onStop();
+        returnDate.setText(viewModel.getInitialReturnDate());
+        departureDate.setText(viewModel.getInitialDepartureDate());
     }
 
     //endregion
-
-    //region view surface
-    @Override
-    public void showLoader() {
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideLoader() {
-        progressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void setDepartureDate(String date) {
-        departureDate.setText(date);
-    }
-
-    @Override
-    public void setReturnDate(String date) {
-        returnDate.setText(date);
-    }
-
-    @Override
-    public void handleDepartureDateChoices() {
-        CustomDatePickerDialog dialog = new CustomDatePickerDialog(this, this, TAG_DEPARTURE_DATE);
-        dialog.show();
-    }
-
-    @Override
-    public void handleReturnDateChoices() {
-        CustomDatePickerDialog dialog = new CustomDatePickerDialog(this, this, TAG_RETURN_DATE);
-        dialog.show();
-    }
-
-    @Override
-    public void showDateError() {
-        new AlertDialog.Builder(this)
-                .setIcon(getDrawable(R.mipmap.ic_launcher))
-                .setTitle(getString(R.string.txt_title_error))
-                .setMessage(getString(R.string.txt_date_error))
-                .setPositiveButton(getString(R.string.txt_btn_ok), null)
-                .show();
-    }
-
-    //endregion
-
-    //region DateSetListener
-    @Override
-    public void onDateSet(int year, int month, int dayOfTheMonth, String tag) {
-        if (tag.equalsIgnoreCase(TAG_DEPARTURE_DATE)) {
-            presenter.handleDepartureDateSet(year, month, dayOfTheMonth);
-        } else if (tag.equalsIgnoreCase(TAG_RETURN_DATE)) {
-            presenter.handleReturnDateSet(year, month, dayOfTheMonth);
-        }
-    }
-    //endregion
-
-    //region textwatcher
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        //do nothing
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-        //do nothing
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-        if (s.hashCode() == arrivalAirport.getText().hashCode()) {
-            presenter.handleArrivalAirportInput(s.toString());
-        } else if (s.hashCode() == departureAirport.getText().hashCode()) {
-            presenter.handleDepartureAirportInput(s.toString());
-        }
-    }
-
-    @Override
-    public void showDepartureAirportError() {
-        showError(getString(R.string.txt_departure_airport_error));
-    }
-
-    @Override
-    public void showArrivalAirportError() {
-        showError(getString(R.string.txt_arrival_airport_error));
-    }
-
-    @Override
-    public void showErrorResponse(String error) {
-        showError(error);
-    }
-
-    @Override
-    public void showFlightData(List<FlightData> flightDataList) {
-        queryContainer.setVisibility(View.GONE);
-        FlightDataAdapter dataAdapter = new FlightDataAdapter(flightDataList, this);
-        flightContainer.setVisibility(View.VISIBLE);
-        flightList.setAdapter(dataAdapter);
-        flightList.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    //endregion
-
 
     //region private
+
+    public void handleSubmitClicked() {
+        if (viewModel.isQueryDataComplete()) {
+            if (viewModel.validateReturnDate()) {
+                showLoader();
+                viewModel.getFlightData().observe(this, this::showFlightData);
+            } else {
+                showDateError();
+            }
+        } else {
+            if (viewModel.getArrivalCode() == null || viewModel.getArrivalCode().isEmpty()) {
+                showArrivalAirportError();
+            } else if (viewModel.getDepartureCode() == null || viewModel.getDepartureCode().isEmpty()) {
+                showDepartureAirportError();
+            }
+        }
+    }
+
     private void getInfoDialog() {
         if (cachedInformationDialog == null) {
             cachedInformationDialog = new AlertDialog.Builder(this)
@@ -255,6 +161,96 @@ public class MainActivity extends AppCompatActivity implements
                 .appComponent(app.appComponent)
                 .build();
         component.inject(this);
+        viewModel.setFlightService(app.service);
+    }
+
+    private void showLoader() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+
+    private void hideLoader() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+
+    private void showDepartureDateDialog() {
+        CustomDatePickerDialog dialog = new CustomDatePickerDialog(this, this, TAG_DEPARTURE_DATE);
+        dialog.show();
+    }
+
+
+    private void showReturnDateDialog() {
+        CustomDatePickerDialog dialog = new CustomDatePickerDialog(this, this, TAG_RETURN_DATE);
+        dialog.show();
+    }
+
+
+    private void showDateError() {
+        new AlertDialog.Builder(this)
+                .setIcon(getDrawable(R.mipmap.ic_launcher))
+                .setTitle(getString(R.string.txt_title_error))
+                .setMessage(getString(R.string.txt_date_error))
+                .setPositiveButton(getString(R.string.txt_btn_ok), null)
+                .show();
+    }
+
+    private void showDepartureAirportError() {
+        showError(getString(R.string.txt_departure_airport_error));
+    }
+
+
+    private void showArrivalAirportError() {
+        showError(getString(R.string.txt_arrival_airport_error));
+    }
+
+
+    private void showErrorResponse(String error) {
+        showError(error);
+    }
+
+
+    private void showFlightData(List<FlightData> flightDataList) {
+        hideLoader();
+        queryContainer.setVisibility(View.GONE);
+        FlightDataAdapter dataAdapter = new FlightDataAdapter(flightDataList, this);
+        flightContainer.setVisibility(View.VISIBLE);
+        flightList.setAdapter(dataAdapter);
+        flightList.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+
+    //endregion
+
+    //region DateSetListener
+    @Override
+    public void onDateSet(int year, int month, int dayOfTheMonth, String tag) {
+        if (tag.equalsIgnoreCase(TAG_DEPARTURE_DATE)) {
+            viewModel.setDepartureDate(year, month, dayOfTheMonth);
+        } else if (tag.equalsIgnoreCase(TAG_RETURN_DATE)) {
+            viewModel.setReturnDate(year, month, dayOfTheMonth);
+        }
+    }
+    //endregion
+
+    //region textwatcher
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        //do nothing
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        //do nothing
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (s.hashCode() == arrivalAirport.getText().hashCode()) {
+            viewModel.setArrivalCode(arrivalAirport.getText().toString());
+        } else if (s.hashCode() == departureAirport.getText().hashCode()) {
+            viewModel.setDepartureCode(departureAirport.getText().toString());
+        }
     }
     //endregion
 }
