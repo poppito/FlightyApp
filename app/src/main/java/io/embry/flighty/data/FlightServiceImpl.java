@@ -1,8 +1,10 @@
 package io.embry.flighty.data;
 
 import androidx.annotation.Nullable;
-import io.embry.flighty.util.AsyncResultCallback;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import io.embry.flighty.repository.FlightService;
+import io.embry.flighty.util.AsyncResultCallback;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,22 +22,24 @@ public class FlightServiceImpl implements FlightService {
         service = retrofit.create(FlightApi.class);
     }
 
-    public void retrieveFlightData(String departureAirportCode, String arrivalAirportCode, String departureDate, String arrivalDate, AsyncResultCallback<List<FlightData>> callback) {
+    public LiveData<List<FlightData>> retrieveFlightData(String departureAirportCode, String arrivalAirportCode, String departureDate, String arrivalDate) {
+        MutableLiveData<List<FlightData>> data = new MutableLiveData<>();
         service.getFlightData(departureAirportCode, arrivalAirportCode, departureDate, arrivalDate).enqueue(new Callback<List<FlightData>>() {
             @Override
             public void onResponse(@Nullable Call<List<FlightData>> call, @Nullable Response<List<FlightData>> response) {
                 if (response != null && response.code() == 200 && response.body() != null) {
-                    callback.onSuccess(response.body());
+                    data.setValue(response.body());
                 } else {
-                    callback.onError(new Throwable());
                 }
             }
 
             @Override
             public void onFailure(Call<List<FlightData>> call, Throwable t) {
-                callback.onError(t);
+
             }
         });
+
+        return data;
     }
 
     @Override
